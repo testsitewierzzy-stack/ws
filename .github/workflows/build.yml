@@ -14,15 +14,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.1.0
-        with:
-          packages: 'platforms;android-34 build-tools;34.0.0'
+      - name: Build with Gradle
+        run: |
+          export ANDROID_HOME=/usr/local/lib/android/sdk
+          export ANDROID_SDK_ROOT=/usr/local/lib/android/sdk
+          chmod +x gradlew || true
+          gradle wrapper
+          ./gradlew assembleDebug
           
-      - name: Generate Wrapper and Build
-        run: gradle wrapper && ./gradlew assembleDebug
-        working-directory: .
-        
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
